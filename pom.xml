@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.trancecode</groupId>
+    <artifactId>trancecode</artifactId>
+    <version>12</version>
+  </parent>
+
+  <groupId>org.trancecode.web</groupId>
+  <artifactId>mobileview</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+
+  <inceptionYear>2012</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>git://github.com/herve-quiroz/mobileview.git</connection>
+    <developerConnection>scm:git:file://${basedir}</developerConnection>
+    <url>https://github.com/herve-quiroz/mobileview</url>
+  </scm>
+
+  <developers>
+
+    <developer>
+      <name>Herve Quiroz</name>
+      <email>herve.quiroz@trancecode.org</email>
+    </developer>
+
+  </developers>
+
+  <repositories>
+
+    <repository>
+      <id>releases.trancecode.org</id>
+      <name>TranceCode repository for release artifacts</name>
+      <url>http://maven.trancecode.org/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+  </repositories>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <test.quiet>true</test.quiet>
+    <surefire.vm.args />
+
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.trancecode.web</groupId>
+      <artifactId>xslt-servlet</artifactId>
+      <classifier>launcher</classifier>
+      <version>0.2.0-SNAPSHOT</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <extensions>
+
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>2.2</version>
+      </extension>
+
+    </extensions>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <filters>
+                <filter>
+                  <artifact>net.sf.saxon:saxon-he</artifact>
+                  <excludes>
+                    <exclude>META-INF/SAXONICA.*</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.trancecode.web.Launcher</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>8.0.0.M3</version>
+        <configuration>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+</project>
